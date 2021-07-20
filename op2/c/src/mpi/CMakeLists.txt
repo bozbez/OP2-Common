@@ -40,7 +40,7 @@ endif()
 add_definitions(${OP2_MPI_DEFINITIONS})
 include_directories(${OP2_MPI_INCLUDE_DIRS})
 add_library(op2_mpi ${COMMON_SRC} ${RT_SRC} ${UTIL_SRC} ${MPI_SRC}
-  op_mpi_decl.c op_mpi_rt_support.c ../externlib/op_renumber.cpp)
+  op_mpi_decl.c op_mpi_rt_support.cpp ../externlib/op_renumber.cpp)
 target_link_libraries(op2_mpi ${OP2_MPI_LIBRARIES})
 
 # Add target to the build-tree export set
