@@ -33,12 +33,15 @@ jobs:
         run: |
           rsync -a --exclude='.gitignore' --delete OP2-Common/apps/c/ OP2-APPS/c/
           rsync -a --exclude='.gitignore' --delete OP2-Common/apps/fortran/ OP2-APPS/fortran/
+          pwd
+          ls -al OP2-APPS
 
       - name: Commit OP2-APPS
         working-directory: OP2-APPS
         run: |
           git config user.name 'opdslapps'
           git config user.email '<>'
+          pwd
           COMMIT_MSG=$(git --git-dir ../OP2-Common log -n 1 --pretty-format=%s $GITHUB_SHA)
           git commit -am "Track: '$COMMIT_MSG'"
 
