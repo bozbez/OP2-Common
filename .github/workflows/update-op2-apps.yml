@@ -34,16 +34,15 @@ jobs:
         run: |
           rsync -a --exclude='.gitignore' --delete OP2-Common/apps/ OP2-APPS/apps/
 
-      - name: Commit OP2-APPS
-        working-directory: OP2-APPS
+      - name: Configure git name and email
         run: |
           git config user.name 'opdslapps'
           git config user.email '<>'
+
+      - name: Commit and push OP2-APPS
+        working-directory: OP2-APPS
+        run: |
           COMMIT_MSG=$(git --git-dir ../OP2-Common/.git log -n 1 --pretty=format:"%h %s" $GITHUB_SHA)
           git add .
           git commit -m "Track \"$COMMIT_MSG\"" || true
-
-      - name: Push OP2-APPS
-        working-directory: OP2-APPS
-        run: |
-          git push "https://bla@github.com/bozbez/OP2-APPS.git"
+          git push
