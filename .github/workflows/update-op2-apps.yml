@@ -1,0 +1,49 @@
+name: update-op2-apps
+on:
+  push:
+    paths:
+      - 'apps/**'
+      - 'translator/**'
+      - 'makefiles/*_app.mk'
+    branches:
+      - 'master'
+
+jobs:
+  update-op2-apps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: OP2-Common
+
+      - name: Checkout OP2-APPS
+        uses: actions/checkout@v2
+        with:
+          repository: bozbez/OP2-APPS
+          path: OP2-APPS
+
+      - name: Translate apps
+        run: |
+          FILES=$(find OP2-Common/apps -name Makefile | xargs grep -l 'include.*[cf]_app.mk')
+          for file in $FILES; do make -C $(dirname $file) .generated; done
+
+      - name: Update OP2-APPS
+        run: |
+          rsync -a --exclude='.gitignore' --delete OP2-Common/apps/c/ OP2-APPS/c/
+          rsync -a --exclude='.gitignore' --delete OP2-Common/apps/fortran/ OP2-APPS/fortran/
+
+      - name: Commit OP2-APPS
+        working-directory: OP2-APPS
+        run: |
+          git config user.name 'opdslapps'
+          git config user.email '<>'
+          COMMIT_MSG=$(git --git-dir ../OP2-Common log -n 1 --pretty-format=%s $GITHUB_SHA)
+          git commit -am "Track: '$COMMIT_MSG'"
+
+      - name: Push OP2-APPS
+        working-directory: OP2-APPS
+        env:
+          OP2_APPS_TOKEN: ${{ secrets.OP2_APPS_TOKEN }}
+        run: |
+          git push "https://bozbez:$OP2_APPS_TOKEN@github.com/bozbez/OP2-APPS.git"
