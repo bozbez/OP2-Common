@@ -39,7 +39,7 @@ jobs:
         run: |
           git config user.name 'opdslapps'
           git config user.email '<>'
-          COMMIT_MSG=$(git --git-dir ../OP2-Common/.git log -n 1 --pretty=format=%s $GITHUB_SHA)
+          COMMIT_MSG=$(git --git-dir ../OP2-Common/.git log -n 1 --pretty=oneline $GITHUB_SHA)
           git add .
           git commit -am "Track '$COMMIT_MSG'"
 
