@@ -46,4 +46,4 @@ jobs:
       - name: Push OP2-APPS
         working-directory: OP2-APPS
         run: |
-          git push
+          git push "https://bla@github.com/bozbez/OP2-APPS.git"
