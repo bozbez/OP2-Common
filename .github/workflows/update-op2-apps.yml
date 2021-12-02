@@ -5,6 +5,7 @@ on:
       - 'apps/**'
       - 'translator/**'
       - 'makefiles/*_app.mk'
+      - '.github/workflows/update-op2-apps.yml'
     branches:
       - 'master'
 
